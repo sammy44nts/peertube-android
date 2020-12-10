@@ -28,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -41,6 +40,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.github.se_bastiaan.torrentstream.StreamStatus;
 import com.github.se_bastiaan.torrentstream.Torrent;
@@ -56,7 +60,6 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.mikepenz.iconics.Iconics;
 
 import net.schueller.peertube.R;
-
 import net.schueller.peertube.helper.APIUrlHelper;
 import net.schueller.peertube.helper.ErrorHelper;
 import net.schueller.peertube.model.File;
@@ -64,10 +67,6 @@ import net.schueller.peertube.model.Video;
 import net.schueller.peertube.network.GetVideoDataService;
 import net.schueller.peertube.network.RetrofitInstance;
 import net.schueller.peertube.service.VideoPlayerService;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,7 +90,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
     private static final String TAG = "VideoPlayerFragment";
     private GestureDetector mDetector;
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -113,11 +112,9 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             mBound = false;
         }
     };
-    private AspectRatioFrameLayout.AspectRatioListener aspectRatioListerner = new AspectRatioFrameLayout.AspectRatioListener()
-    {
+    private final AspectRatioFrameLayout.AspectRatioListener aspectRatioListerner = new AspectRatioFrameLayout.AspectRatioListener() {
         @Override
-        public void onAspectRatioUpdated( float targetAspectRatio, float naturalAspectRatio, boolean aspectRatioMismatch )
-        {
+        public void onAspectRatioUpdated(float targetAspectRatio, float naturalAspectRatio, boolean aspectRatioMismatch) {
             aspectRatio = targetAspectRatio;
         }
     };
@@ -153,7 +150,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
         mDetector = new GestureDetector(context, new MyGestureListener());
         simpleExoPlayerView.setOnTouchListener(touchListener);
 
-        simpleExoPlayerView.setAspectRatioListener( aspectRatioListerner );
+        simpleExoPlayerView.setAspectRatioListener(aspectRatioListerner);
 
         torrentStatus = activity.findViewById(R.id.exo_torrent_status);
 
@@ -178,12 +175,11 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
     }
 
     private void loadVideo() {
-        Context context = getContext();
-
+        Context context = requireContext();
 
         // get video details from api
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-        GetVideoDataService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(context)).create(GetVideoDataService.class);
+        GetVideoDataService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity())).create(GetVideoDataService.class);
 
         Call<Video> call = service.getVideoData(mVideoUuid);
 
@@ -207,7 +203,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             @Override
             public void onFailure(@NonNull Call<Video> call, @NonNull Throwable t) {
                 Log.wtf(TAG, t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( getActivity(), t );
+                ErrorHelper.showToastFromCommunicationError(getActivity(), t);
             }
         });
     }
@@ -219,9 +215,6 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
     }
 
     private void playVideo(Video video) {
-
-        Context context = getContext();
-
         // video Meta fragment
         VideoMetaDataFragment videoMetaDataFragment = (VideoMetaDataFragment)
                 requireActivity().getSupportFragmentManager().findFragmentById(R.id.video_meta_data_fragment);
@@ -229,7 +222,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
         assert videoMetaDataFragment != null;
         videoMetaDataFragment.updateVideoMeta(video, mService);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(requireActivity());
 
         if (sharedPref.getBoolean(getString(R.string.pref_torrent_player_key), false)) {
             torrentStatus.setVisibility(View.VISIBLE);
@@ -244,19 +237,19 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             //get video qualities
             /// #
             if (video.getFiles().size() > 0) {
-                String urlToPlay = video.getFiles().get( 0 ).getFileUrl();
-                for ( File file : video.getFiles() ) {
+                String urlToPlay = video.getFiles().get(0).getFileUrl();
+                for (File file : video.getFiles()) {
                     // Set quality if it matches
-                    if ( file.getResolution().getId().equals( videoQuality ) ) {
+                    if (file.getResolution().getId().equals(videoQuality)) {
                         urlToPlay = file.getFileUrl();
                     }
                 }
-                mService.setCurrentStreamUrl( urlToPlay );
+                mService.setCurrentStreamUrl(urlToPlay);
                 torrentStatus.setVisibility(View.GONE);
                 startPlayer();
             } else {
                 stopVideo();
-                Toast.makeText(context, R.string.api_error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.api_error, Toast.LENGTH_LONG).show();
             }
         }
         Log.v(TAG, "end of load Video");
@@ -294,7 +287,9 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
         }
     }
 
-    public float getVideoAspectRatio() { return aspectRatio; }
+    public float getVideoAspectRatio() {
+        return aspectRatio;
+    }
 
     public boolean isPaused() {
         return !mService.player.getPlayWhenReady();
@@ -487,7 +482,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             //arbitrarily velocity speeds that seem to work to differentiate events.
             if (velocityY > 4000) {
                 Log.d(TAG, "we have a drag down event");
-                if (canEnterPipMode(getContext())) {
+                if (canEnterPipMode(requireActivity())) {
                     requireActivity().enterPictureInPictureMode();
                 }
             }

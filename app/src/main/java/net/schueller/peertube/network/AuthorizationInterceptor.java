@@ -45,7 +45,7 @@ public class AuthorizationInterceptor implements Interceptor {
             // add authentication header to each request if we are logged in
             Request.Builder builder = mainRequest.newBuilder().header("Authorization", session.getToken()).
                     method(mainRequest.method(), mainRequest.body());
-           // Log.v("Authorization", "Intercept: " + session.getToken());
+            // Log.v("Authorization", "Intercept: " + session.getToken());
 
             // build request
             Request req = builder.build();

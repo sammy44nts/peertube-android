@@ -18,7 +18,8 @@ package net.schueller.peertube.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.application.AppApplication;
@@ -113,6 +114,6 @@ public class Session {
         editor.putString(context.getString(R.string.pref_token_access), null);
         editor.putString(context.getString(R.string.pref_token_refresh), null);
 
-        editor.commit();
+        editor.apply();
     }
 }

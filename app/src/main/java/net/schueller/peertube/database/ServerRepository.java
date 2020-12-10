@@ -19,15 +19,14 @@ package net.schueller.peertube.database;
 import android.app.Application;
 import android.os.AsyncTask;
 
-
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
 class ServerRepository {
 
-    private ServerDao mServerDao;
-    private LiveData<List<Server>> mAllServers;
+    private final ServerDao mServerDao;
+    private final LiveData<List<Server>> mAllServers;
 
     ServerRepository(Application application) {
         ServerRoomDatabase db = ServerRoomDatabase.getDatabase(application);
@@ -40,17 +39,17 @@ class ServerRepository {
         return mAllServers;
     }
 
-    void insert (Server server) {
+    void insert(Server server) {
         new insertAsyncTask(mServerDao).execute(server);
     }
 
-    public void delete(Server server)  {
+    public void delete(Server server) {
         new deleteServerAsyncTask(mServerDao).execute(server);
     }
 
     private static class insertAsyncTask extends AsyncTask<Server, Void, Void> {
 
-        private ServerDao mAsyncTaskDao;
+        private final ServerDao mAsyncTaskDao;
 
         insertAsyncTask(ServerDao dao) {
             mAsyncTaskDao = dao;
@@ -64,7 +63,7 @@ class ServerRepository {
     }
 
     private static class deleteServerAsyncTask extends AsyncTask<Server, Void, Void> {
-        private ServerDao mAsyncTaskDao;
+        private final ServerDao mAsyncTaskDao;
 
         deleteServerAsyncTask(ServerDao dao) {
             mAsyncTaskDao = dao;

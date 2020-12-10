@@ -21,10 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -35,6 +31,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.activity.SearchServerActivity;
@@ -94,8 +93,8 @@ public class AddServerFragment extends Fragment {
             }
 
             EditText selectedLabel = mView.findViewById(R.id.serverLabel);
-            if ( TextUtils.isEmpty(selectedLabel.getText())){
-                selectedLabel.setError( act.getString(R.string.server_book_label_is_required ));
+            if (TextUtils.isEmpty(selectedLabel.getText())) {
+                selectedLabel.setError(act.getString(R.string.server_book_label_is_required));
                 Toast.makeText(act, R.string.invalid_url, Toast.LENGTH_LONG).show();
                 formValid = false;
             }
@@ -106,7 +105,7 @@ public class AddServerFragment extends Fragment {
             selectedUrl.setText(serverUrl);
 
             if (!Patterns.WEB_URL.matcher(serverUrl).matches()) {
-                selectedUrl.setError( act.getString(R.string.server_book_valid_url_is_required ) );
+                selectedUrl.setError(act.getString(R.string.server_book_valid_url_is_required));
                 Toast.makeText(act, R.string.invalid_url, Toast.LENGTH_LONG).show();
                 formValid = false;
             }
@@ -140,7 +139,7 @@ public class AddServerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_SERVER) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
 
                 String serverUrlTest = data.getStringExtra("serverUrl");
                 //Log.d(TAG, "serverUrl " + serverUrlTest);

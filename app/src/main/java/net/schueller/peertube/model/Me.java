@@ -31,7 +31,7 @@ public class Me {
     private String roleLabel;
     private String username;
 
-  //  private VideoChannels videoChannels;
+    //  private VideoChannels videoChannels;
     private Integer videoQuota;
     private Integer videoQuotaDaily;
     private String webTorrentEnabled;

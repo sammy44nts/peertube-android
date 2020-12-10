@@ -26,32 +26,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
-import android.provider.SearchRecentSuggestions;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
-
-import androidx.core.app.ActivityCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-
+import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -68,7 +62,6 @@ import net.schueller.peertube.network.Session;
 import net.schueller.peertube.provider.SearchSuggestionsProvider;
 import net.schueller.peertube.service.VideoPlayerService;
 
-
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -78,7 +71,7 @@ import retrofit2.Response;
 
 public class VideoListActivity extends CommonActivity {
 
-    private String TAG = "VideoListActivity";
+    private final String TAG = "VideoListActivity";
 
     public static final String EXTRA_VIDEOID = "VIDEOID";
     public static final String EXTRA_ACCOUNTDISPLAYNAME = "ACCOUNTDISPLAYNAMEANDHOST";
@@ -88,7 +81,7 @@ public class VideoListActivity extends CommonActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private int currentStart = 0;
-    private int count = 12;
+    private final int count = 12;
     private String sort = "-createdAt";
     private String filter = null;
     private String searchQuery = "";
@@ -147,25 +140,20 @@ public class VideoListActivity extends CommonActivity {
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         searchView.setQueryRefinementEnabled(true);
 
-        searchMenuItem.getActionView().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new AlertDialog.Builder(VideoListActivity.this)
-                        .setTitle(getString(R.string.clear_search_history))
-                        .setMessage(getString(R.string.clear_search_history_prompt))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getApplicationContext(),
-                                        SearchSuggestionsProvider.AUTHORITY,
-                                        SearchSuggestionsProvider.MODE);
-                                suggestions.clearHistory();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                return true;
-            }
+        searchMenuItem.getActionView().setOnLongClickListener(v -> {
+            new AlertDialog.Builder(VideoListActivity.this)
+                    .setTitle(getString(R.string.clear_search_history))
+                    .setMessage(getString(R.string.clear_search_history_prompt))
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getApplicationContext(),
+                                SearchSuggestionsProvider.AUTHORITY,
+                                SearchSuggestionsProvider.MODE);
+                        suggestions.clearHistory();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return true;
         });
         searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -222,7 +210,7 @@ public class VideoListActivity extends CommonActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SWITCH_INSTANCE) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 loadVideos(currentStart, count, sort, filter);
             }
         }
@@ -245,13 +233,13 @@ public class VideoListActivity extends CommonActivity {
 
                 //Intent intentLogin = new Intent(this, ServerAddressBookActivity.class);
 
-                    Intent intentMe = new Intent(this, MeActivity.class);
-                    this.startActivity(intentMe);
+                Intent intentMe = new Intent(this, MeActivity.class);
+                this.startActivity(intentMe);
 
-                    //overridePendingTransition(R.anim.slide_in_bottom, 0);
+                //overridePendingTransition(R.anim.slide_in_bottom, 0);
 
 
-                  //  this.startActivity(intentLogin);
+                //  this.startActivity(intentLogin);
 
 //                } else {
 //                    Intent intentMe = new Intent(this, MeActivity.class);
@@ -372,7 +360,7 @@ public class VideoListActivity extends CommonActivity {
             @Override
             public void onFailure(@NonNull Call<VideoList> call, @NonNull Throwable t) {
                 Log.wtf("err", t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( VideoListActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(VideoListActivity.this, t);
                 isLoading = false;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -384,7 +372,7 @@ public class VideoListActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         // only check when we actually need the permission
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
                 sharedPref.getBoolean(getString(R.string.pref_torrent_player_key), false)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);

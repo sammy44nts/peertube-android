@@ -18,14 +18,13 @@ package net.schueller.peertube.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Patterns;
 import android.webkit.URLUtil;
-import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
 
-public class APIUrlHelper{
+public class APIUrlHelper {
 
     public static String getUrl(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);

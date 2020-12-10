@@ -24,6 +24,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mikepenz.iconics.Iconics;
 import com.squareup.picasso.Picasso;
 
@@ -37,17 +41,13 @@ import net.schueller.peertube.model.Video;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-
 import static net.schueller.peertube.activity.VideoListActivity.EXTRA_VIDEOID;
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.AccountViewHolder> {
 
 
-    private ArrayList<Video> videoList;
-    private Context context;
+    private final ArrayList<Video> videoList;
+    private final Context context;
     private String baseUrl;
 
     public ChannelAdapter(ArrayList<Video> videoList, Context context) {
@@ -86,7 +86,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.AccountV
         holder.name.setText(videoList.get(position).getName());
 
         // set duration
-        holder.videoDuration.setText( MetaDataHelper.getDuration(videoList.get(position).getDuration().longValue()));
+        holder.videoDuration.setText(MetaDataHelper.getDuration(videoList.get(position).getDuration().longValue()));
 
         // set age and view count
         holder.videoMeta.setText(
@@ -108,7 +108,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.AccountV
 
             // Log.v("VideoAdapter", "click: " + videoList.get(position).getName());
 
-            Intent intent = new Intent(context,VideoPlayActivity.class);
+            Intent intent = new Intent(context, VideoPlayActivity.class);
             intent.putExtra(EXTRA_VIDEOID, videoList.get(position).getUuid());
             context.startActivity(intent);
 

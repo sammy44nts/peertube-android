@@ -22,13 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mikepenz.iconics.Iconics;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.service.VideoPlayerService;
-
-import androidx.annotation.Nullable;
 
 public class VideoMenuSpeedFragment extends BottomSheetDialogFragment {
 

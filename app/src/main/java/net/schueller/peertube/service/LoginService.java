@@ -18,11 +18,11 @@ package net.schueller.peertube.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.application.AppApplication;

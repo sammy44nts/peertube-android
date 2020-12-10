@@ -18,16 +18,15 @@ package net.schueller.peertube.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.iconics.Iconics;
 import com.squareup.picasso.Picasso;
@@ -49,8 +48,8 @@ import static net.schueller.peertube.activity.VideoListActivity.EXTRA_VIDEOID;
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
 
-    private ArrayList<Video> videoList;
-    private Context context;
+    private final ArrayList<Video> videoList;
+    private final Context context;
     private String baseUrl;
 
     public VideoAdapter(ArrayList<Video> videoList, Context context) {

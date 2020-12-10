@@ -17,7 +17,6 @@
 package net.schueller.peertube.helper;
 
 import android.content.Context;
-
 import android.text.format.DateUtils;
 
 import net.schueller.peertube.R;

@@ -18,16 +18,16 @@ package net.schueller.peertube.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-
 import android.util.Log;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
+
 import net.schueller.peertube.BuildConfig;
 import net.schueller.peertube.R;
 
@@ -72,11 +72,11 @@ public class SettingsActivity extends CommonActivity {
             pref.setSummary(Long.toString(BuildConfig.BUILD_TIME));
 
             // double check disabling SSL
-            final SwitchPreference insecure = (SwitchPreference) findPreference("pref_accept_insecure");
+            final SwitchPreference insecure = findPreference("pref_accept_insecure");
             if (insecure != null) {
                 insecure.setOnPreferenceChangeListener((preference, newValue) -> {
 
-                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(requireActivity());
                     SharedPreferences.Editor editor = sharedPref.edit();
 
                     boolean currentValue = sharedPref.getBoolean("pref_accept_insecure", false);

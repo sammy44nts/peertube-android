@@ -20,15 +20,10 @@ import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,18 +32,19 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import net.schueller.peertube.R;
 import net.schueller.peertube.adapter.ServerListAdapter;
 import net.schueller.peertube.database.Server;
 import net.schueller.peertube.database.ServerViewModel;
 import net.schueller.peertube.fragment.AddServerFragment;
 
-
 import java.util.Objects;
 
 public class ServerAddressBookActivity extends CommonActivity implements AddServerFragment.OnFragmentInteractionListener {
 
-    private String TAG = "ServerAddressBookActivity";
+    private final String TAG = "ServerAddressBookActiv";
     public static final String EXTRA_REPLY = "net.schueller.peertube.room.REPLY";
 
     private ServerViewModel mServerViewModel;
@@ -107,10 +103,9 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
     }
 
 
-    public void showServers()
-    {
+    public void showServers() {
         RecyclerView recyclerView = findViewById(R.id.server_list_recyclerview);
-        final ServerListAdapter adapter = new ServerListAdapter(this);
+        final ServerListAdapter adapter = new ServerListAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -141,9 +136,7 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
                                     // Delete the server
                                     mServerViewModel.delete(server);
                                 })
-                                .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                                    adapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                                })
+                                .setNegativeButton(android.R.string.no, (dialog, which) -> adapter.notifyItemChanged(viewHolder.getAdapterPosition()))
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
 
@@ -157,8 +150,7 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
 
     }
 
-    public void addServer(View view)
-    {
+    public void addServer(View view) {
         Log.d(TAG, "addServer");
 
         EditText serverLabel = view.findViewById(R.id.serverLabel);
@@ -182,8 +174,7 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
 
     }
 
-    public void testServer()
-    {
+    public void testServer() {
 
     }
 

@@ -18,12 +18,15 @@ package net.schueller.peertube.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mikepenz.iconics.Iconics;
@@ -33,9 +36,6 @@ import net.schueller.peertube.model.File;
 import net.schueller.peertube.service.VideoPlayerService;
 
 import java.util.ArrayList;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 
 public class VideoOptionsFragment extends BottomSheetDialogFragment {
 
@@ -106,7 +106,7 @@ public class VideoOptionsFragment extends BottomSheetDialogFragment {
     }
 
     private String getCurrentVideoQuality(ArrayList<File> files) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(requireActivity());
         Integer videoQuality = sharedPref.getInt(getString(R.string.pref_quality_key), 0);
 
         for (File file : files) {

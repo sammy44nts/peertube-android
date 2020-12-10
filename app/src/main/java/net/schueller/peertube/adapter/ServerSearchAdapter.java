@@ -24,18 +24,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.activity.SearchServerActivity;
 import net.schueller.peertube.helper.APIUrlHelper;
 import net.schueller.peertube.model.Server;
 
-import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,8 +42,8 @@ import static android.app.Activity.RESULT_OK;
 public class ServerSearchAdapter extends RecyclerView.Adapter<ServerSearchAdapter.AccountViewHolder> {
 
 
-    private ArrayList<Server> serverList;
-    private SearchServerActivity activity;
+    private final ArrayList<Server> serverList;
+    private final SearchServerActivity activity;
     private String baseUrl;
 
     public ServerSearchAdapter(ArrayList<Server> serverList, SearchServerActivity activity) {

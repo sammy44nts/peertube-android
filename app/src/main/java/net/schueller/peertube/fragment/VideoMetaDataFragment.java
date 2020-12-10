@@ -33,6 +33,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import com.mikepenz.iconics.Iconics;
 import com.squareup.picasso.Picasso;
 
@@ -50,11 +55,6 @@ import net.schueller.peertube.network.RetrofitInstance;
 import net.schueller.peertube.network.Session;
 import net.schueller.peertube.service.VideoPlayerService;
 
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -83,40 +83,34 @@ public class VideoMetaDataFragment extends Fragment {
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         leaveAppExpected = false;
         super.onPause();
     }
 
-    public boolean isLeaveAppExpected()
-    {
+    public boolean isLeaveAppExpected() {
         return leaveAppExpected;
     }
 
     public void updateVideoMeta(Video video, VideoPlayerService mService) {
-        Context context = getContext();
-        Activity activity = getActivity();
+        Context context = requireContext();
+        Activity activity = requireActivity();
 
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-        GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(context)).create(GetVideoDataService.class);
+        GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(activity)).create(GetVideoDataService.class);
 
         // Thumbs up
         Button thumbsUpButton = activity.findViewById(R.id.video_thumbs_up);
         defaultTextColor = thumbsUpButton.getTextColors();
         thumbsUpButton.setText(R.string.video_thumbs_up_icon);
         new Iconics.IconicsBuilder().ctx(context).on(thumbsUpButton).build();
-        thumbsUpButton.setOnClickListener(v -> {
-            rateVideo(true, video);
-        });
+        thumbsUpButton.setOnClickListener(v -> rateVideo(true, video));
 
         // Thumbs Down
         Button thumbsDownButton = activity.findViewById(R.id.video_thumbs_down);
         thumbsDownButton.setText(R.string.video_thumbs_down_icon);
         new Iconics.IconicsBuilder().ctx(context).on(thumbsDownButton).build();
-        thumbsDownButton.setOnClickListener(v -> {
-            rateVideo(false, video);
-        });
+        thumbsDownButton.setOnClickListener(v -> rateVideo(false, video));
 
         // video rating
         videoRating = new Rating();
@@ -136,7 +130,7 @@ public class VideoMetaDataFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Rating> call, Throwable t) {
-                    ErrorHelper.showToastFromCommunicationError( getActivity(), t );
+                    ErrorHelper.showToastFromCommunicationError(getActivity(), t);
                     // Do nothing.
                 }
             });
@@ -147,10 +141,10 @@ public class VideoMetaDataFragment extends Fragment {
         videoShareButton.setText(R.string.video_share_icon);
         new Iconics.IconicsBuilder().ctx(context).on(videoShareButton).build();
         videoShareButton.setOnClickListener(v ->
-                                            {
-                                                leaveAppExpected = true;
-                                                Intents.Share( context, video );
-                                            } );
+        {
+            leaveAppExpected = true;
+            Intents.Share(context, video);
+        });
 
         // Download
         Button videoDownloadButton = activity.findViewById(R.id.video_download);
@@ -177,7 +171,7 @@ public class VideoMetaDataFragment extends Fragment {
         Avatar avatar = account.getAvatar();
         if (avatar != null) {
             ImageView avatarView = activity.findViewById(R.id.avatar);
-            String baseUrl = APIUrlHelper.getUrl(context);
+            String baseUrl = APIUrlHelper.getUrl(requireActivity());
             String avatarPath = avatar.getPath();
             Picasso.get()
                     .load(baseUrl + avatarPath)
@@ -325,7 +319,7 @@ public class VideoMetaDataFragment extends Fragment {
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), "{\"rating\":\"" + ratePayload + "\"}");
 
             String apiBaseURL = APIUrlHelper.getUrlWithVersion(getContext());
-            GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(getContext())).create(GetVideoDataService.class);
+            GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity())).create(GetVideoDataService.class);
 
             Call<ResponseBody> call = videoDataService.rateVideo(video.getId(), body);
 

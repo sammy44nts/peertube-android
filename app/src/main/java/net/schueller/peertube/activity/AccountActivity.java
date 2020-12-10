@@ -24,7 +24,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
@@ -46,17 +52,10 @@ import net.schueller.peertube.network.GetUserService;
 import net.schueller.peertube.network.GetVideoDataService;
 import net.schueller.peertube.network.RetrofitInstance;
 
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +63,7 @@ import retrofit2.Response;
 
 public class AccountActivity extends CommonActivity {
 
-    private String TAG = "AccountActivity";
+    private final String TAG = "AccountActivity";
     private String apiBaseURL;
 
     private Integer videosStart, videosCount, videosCurrentStart;
@@ -206,7 +205,7 @@ public class AccountActivity extends CommonActivity {
                     }
 
                 } else {
-                    ErrorHelper.showToastFromCommunicationError( AccountActivity.this, null );
+                    ErrorHelper.showToastFromCommunicationError(AccountActivity.this, null);
                 }
 
 
@@ -215,7 +214,7 @@ public class AccountActivity extends CommonActivity {
             @Override
             public void onFailure(@NonNull Call<Account> call, @NonNull Throwable t) {
                 Log.wtf(TAG, t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( AccountActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(AccountActivity.this, t);
             }
         });
 
@@ -246,8 +245,8 @@ public class AccountActivity extends CommonActivity {
                         videoAdapter.setData(response.body().getVideoArrayList());
                     }
 
-                } else{
-                    ErrorHelper.showToastFromCommunicationError( AccountActivity.this, null );
+                } else {
+                    ErrorHelper.showToastFromCommunicationError(AccountActivity.this, null);
                 }
 
                 isLoadingVideos = false;
@@ -257,7 +256,7 @@ public class AccountActivity extends CommonActivity {
             @Override
             public void onFailure(@NonNull Call<VideoList> call, @NonNull Throwable t) {
                 Log.wtf("err", t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( AccountActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(AccountActivity.this, t);
                 isLoadingVideos = false;
                 swipeRefreshLayoutVideos.setRefreshing(false);
             }
@@ -278,9 +277,8 @@ public class AccountActivity extends CommonActivity {
                     ChannelList channelList = response.body();
 
 
-
                 } else {
-                    ErrorHelper.showToastFromCommunicationError( AccountActivity.this, null );
+                    ErrorHelper.showToastFromCommunicationError(AccountActivity.this, null);
                 }
 
 
@@ -289,11 +287,10 @@ public class AccountActivity extends CommonActivity {
             @Override
             public void onFailure(@NonNull Call<ChannelList> call, @NonNull Throwable t) {
                 Log.wtf(TAG, t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( AccountActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(AccountActivity.this, t);
             }
         });
     }
-
 
 
     private void createBottomBarNavigation() {

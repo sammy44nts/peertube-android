@@ -28,6 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+
+import com.squareup.picasso.Picasso;
+
 import net.schueller.peertube.R;
 import net.schueller.peertube.helper.APIUrlHelper;
 import net.schueller.peertube.helper.ErrorHelper;
@@ -36,11 +41,6 @@ import net.schueller.peertube.model.Me;
 import net.schueller.peertube.network.GetUserService;
 import net.schueller.peertube.network.RetrofitInstance;
 import net.schueller.peertube.network.Session;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -124,7 +124,7 @@ public class MeActivity extends CommonActivity {
 
         call.enqueue(new Callback<Me>() {
 
-            LinearLayout account = findViewById(R.id.a_me_account_line);
+            final LinearLayout account = findViewById(R.id.a_me_account_line);
 
             @Override
             public void onResponse(@NonNull Call<Me> call, @NonNull Response<Me> response) {
@@ -162,7 +162,7 @@ public class MeActivity extends CommonActivity {
 
             @Override
             public void onFailure(@NonNull Call<Me> call, @NonNull Throwable t) {
-                ErrorHelper.showToastFromCommunicationError( MeActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(MeActivity.this, t);
                 account.setVisibility(View.GONE);
             }
         });

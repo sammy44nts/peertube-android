@@ -20,8 +20,9 @@ import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
 
@@ -40,7 +41,7 @@ public class VideoHelper {
                 sharedPref.getString(
                         context.getString(R.string.pref_background_behavior_key),
                         context.getString(R.string.pref_background_float_key))
-            )
+        )
         ) {
             return false;
         }

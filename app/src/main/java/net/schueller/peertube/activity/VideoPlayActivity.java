@@ -19,7 +19,6 @@ package net.schueller.peertube.activity;
 
 
 import android.annotation.SuppressLint;
-import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.app.RemoteAction;
@@ -32,34 +31,27 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.preference.PreferenceManager;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Rational;
 import android.util.TypedValue;
-
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.fragment.VideoMetaDataFragment;
 import net.schueller.peertube.fragment.VideoPlayerFragment;
 import net.schueller.peertube.service.VideoPlayerService;
 
-
 import java.util.ArrayList;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 
 import static com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PAUSE;
 import static com.google.android.exoplayer2.ui.PlayerNotificationManager.ACTION_PLAY;
@@ -294,7 +286,7 @@ public class VideoPlayActivity extends AppCompatActivity {
 
         videoPlayerFragment.setIsFullscreen(isLandscape);
 
-        if ( isLandscape ) {
+        if (isLandscape) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -360,8 +352,7 @@ public class VideoPlayActivity extends AppCompatActivity {
 
         assert videoPlayerFragment != null;
         assert backgroundBehavior != null;
-        if ( videoMetaDataFragment.isLeaveAppExpected() )
-        {
+        if (videoMetaDataFragment.isLeaveAppExpected()) {
             super.onUserLeaveHint();
             return;
         }
@@ -461,19 +452,19 @@ public class VideoPlayActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void enterPipMode() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final VideoPlayerFragment videoPlayerFragment = (VideoPlayerFragment) fragmentManager.findFragmentById( R.id.video_player_fragment );
+        final VideoPlayerFragment videoPlayerFragment = (VideoPlayerFragment) fragmentManager.findFragmentById(R.id.video_player_fragment);
 
-        if ( videoPlayerFragment.getVideoAspectRatio() == 0 ) {
-            Log.i( TAG, "impossible to switch to pip" );
+        if (videoPlayerFragment.getVideoAspectRatio() == 0) {
+            Log.i(TAG, "impossible to switch to pip");
         } else {
-            Rational rational = new Rational( (int) ( videoPlayerFragment.getVideoAspectRatio() * 100 ), 100 );
+            Rational rational = new Rational((int) (videoPlayerFragment.getVideoAspectRatio() * 100), 100);
             PictureInPictureParams mParams =
                     new PictureInPictureParams.Builder()
-                            .setAspectRatio( rational )
+                            .setAspectRatio(rational)
 //                          .setSourceRectHint(new Rect(0,500,400,600))
                             .build();
 
-            enterPictureInPictureMode( mParams );
+            enterPictureInPictureMode(mParams);
         }
     }
 

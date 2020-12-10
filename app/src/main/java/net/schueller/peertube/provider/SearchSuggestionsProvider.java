@@ -23,8 +23,7 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     public final static String AUTHORITY = SearchSuggestionsProvider.class.getName();
     public static final int MODE = SearchRecentSuggestionsProvider.DATABASE_MODE_QUERIES;
 
-    public SearchSuggestionsProvider()
-    {
+    public SearchSuggestionsProvider() {
         setupSuggestions(AUTHORITY, MODE);
     }
 

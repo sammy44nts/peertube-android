@@ -32,13 +32,13 @@ public interface AuthenticationService {
     @FormUrlEncoded
     @POST("users/token")
     Call<Token> getAuthenticationToken(
-        @Field("client_id") String clientId,
-        @Field("client_secret") String clientSecret,
-        @Field("response_type") String responseType,
-        @Field("grant_type") String grantType,
-        @Field("scope") String scope,
-        @Field("username") String username,
-        @Field("password") String password
+            @Field("client_id") String clientId,
+            @Field("client_secret") String clientSecret,
+            @Field("response_type") String responseType,
+            @Field("grant_type") String grantType,
+            @Field("scope") String scope,
+            @Field("username") String username,
+            @Field("password") String password
     );
 
     @POST("users/token")

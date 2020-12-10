@@ -16,15 +16,6 @@
  */
 package net.schueller.peertube.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,7 +23,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import net.schueller.peertube.R;
 import net.schueller.peertube.adapter.ServerSearchAdapter;
@@ -44,6 +40,10 @@ import net.schueller.peertube.network.RetrofitInstance;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchServerActivity extends CommonActivity {
 
@@ -84,9 +84,9 @@ public class SearchServerActivity extends CommonActivity {
 
     }
 
-    TextView.OnEditorActionListener onSearchTextValidated = ( textView, i, keyEvent ) -> {
-        if ( keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                || i == EditorInfo.IME_ACTION_GO ) {
+    TextView.OnEditorActionListener onSearchTextValidated = (textView, i, keyEvent) -> {
+        if (keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                || i == EditorInfo.IME_ACTION_GO) {
             loadServers(currentStart, count, textView.getText().toString());
         }
         return false;
@@ -96,8 +96,8 @@ public class SearchServerActivity extends CommonActivity {
 
         recyclerView = findViewById(R.id.serverRecyclerView);
         swipeRefreshLayout = findViewById(R.id.serversSwipeRefreshLayout);
-        searchTextView = findViewById(R.id.search_server_input_field );
-        searchTextView.setOnEditorActionListener( onSearchTextValidated );
+        searchTextView = findViewById(R.id.search_server_input_field);
+        searchTextView.setOnEditorActionListener(onSearchTextValidated);
 
         emptyView = findViewById(R.id.empty_server_selection_view);
 
@@ -107,7 +107,7 @@ public class SearchServerActivity extends CommonActivity {
         serverAdapter = new ServerSearchAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(serverAdapter);
 
-        loadServers(currentStart, count, searchTextView.getText().toString() );
+        loadServers(currentStart, count, searchTextView.getText().toString());
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -149,8 +149,7 @@ public class SearchServerActivity extends CommonActivity {
                 APIUrlHelper.getServerIndexUrl(SearchServerActivity.this)
                 , APIUrlHelper.useInsecureConnection(this)).create(GetServerListDataService.class);
 
-        if ( !searchtext.equals( lastSearchtext ) )
-        {
+        if (!searchtext.equals(lastSearchtext)) {
             currentStart = 0;
             lastSearchtext = searchtext;
         }
@@ -190,7 +189,7 @@ public class SearchServerActivity extends CommonActivity {
             @Override
             public void onFailure(@NonNull Call<ServerList> call, @NonNull Throwable t) {
                 Log.wtf("err", t.fillInStackTrace());
-                ErrorHelper.showToastFromCommunicationError( SearchServerActivity.this, t );
+                ErrorHelper.showToastFromCommunicationError(SearchServerActivity.this, t);
                 isLoading = false;
                 swipeRefreshLayout.setRefreshing(false);
             }

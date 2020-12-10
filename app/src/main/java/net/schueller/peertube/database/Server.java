@@ -40,7 +40,7 @@ public class Server {
     @ColumnInfo(name = "password")
     private String password;
 
-    public Server(@NonNull String serverName)  {
+    public Server(@NonNull String serverName) {
         this.serverName = serverName;
     }
 

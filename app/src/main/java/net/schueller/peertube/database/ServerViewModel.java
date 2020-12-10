@@ -25,20 +25,26 @@ import java.util.List;
 
 public class ServerViewModel extends AndroidViewModel {
 
-    private ServerRepository mRepository;
+    private final ServerRepository mRepository;
 
-    private LiveData<List<Server>> mAllServers;
+    private final LiveData<List<Server>> mAllServers;
 
-    public ServerViewModel (Application application) {
+    public ServerViewModel(Application application) {
         super(application);
         mRepository = new ServerRepository(application);
         mAllServers = mRepository.getAllServers();
     }
 
-    public LiveData<List<Server>> getAllServers() { return mAllServers; }
+    public LiveData<List<Server>> getAllServers() {
+        return mAllServers;
+    }
 
-    public void insert(Server server) { mRepository.insert(server); }
+    public void insert(Server server) {
+        mRepository.insert(server);
+    }
 
-    public void delete(Server server) {mRepository.delete(server);}
-    
+    public void delete(Server server) {
+        mRepository.delete(server);
+    }
+
 }

@@ -16,14 +16,11 @@
  */
 package net.schueller.peertube.network;
 
-import static net.schueller.peertube.network.UnsafeOkHttpClient.getUnsafeOkHttpClientBuilder;
-
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import net.schueller.peertube.R;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static net.schueller.peertube.network.UnsafeOkHttpClient.getUnsafeOkHttpClientBuilder;
 
 public class RetrofitInstance {
 
