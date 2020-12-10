@@ -1,4 +1,8 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 ext.readProperty = { paramName -> readPropertyWithDefault(paramName, null) }
 ext.readPropertyWithDefault = { paramName, defaultValue ->
@@ -32,20 +36,19 @@ else {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
     defaultConfig {
         applicationId "net.schueller.peertube"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode Integer.valueOf(System.getenv("VERSION_CODE") ?: 1)
         versionName System.getenv("VERSION_NAME") + "-" + System.getenv("VERSION_SHA")
         buildConfigField "long", "BUILD_TIME", readPropertyWithDefault('buildTimestamp', System.currentTimeMillis()) + 'L'
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        ext {
-            libVersions = [
-                    exoplayer: '2.11.6'
-            ]
-        }
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
@@ -54,59 +57,8 @@ android {
                         "room.expandProjection": "true"]
             }
         }
-        dependencies {
-            implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-            // Layouts and design
-            implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-            implementation 'androidx.appcompat:appcompat:1.2.0'
-            implementation 'androidx.cardview:cardview:1.0.0'
-            implementation 'androidx.recyclerview:recyclerview:1.1.0'
-            implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-            implementation 'com.google.android.material:material:1.2.0'
-            implementation 'de.hdodenhof:circleimageview:3.0.0'
-
-            // font awesome
-            implementation "com.mikepenz:iconics-core:3.1.0"
-            implementation 'com.mikepenz:fontawesome-typeface:5.3.1.1@aar'
-
-            // http client / REST
-            implementation 'com.squareup.okhttp3:okhttp:4.8.0'
-            implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-
-            // image downloading and caching library
-            implementation 'com.squareup.picasso:picasso:2.71828'
-
-            // json decoder/encoder
-            implementation 'com.google.code.gson:gson:2.8.6'
-            implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-
-            // Torrents and WebRTC
-            implementation 'com.github.TorrentStream:TorrentStream-Android:2.6.1'
-//            implementation "com.github.TorrentStream:TorrentStreamServer-Android:1.0.1"
-//            implementation 'org.webrtc:google-webrtc:1.0.+'
-
-            // video player  repo:jcenter()
-            implementation "com.google.android.exoplayer:exoplayer-core:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:exoplayer-dash:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:exoplayer-ui:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:exoplayer-hls:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:extension-mediasession:$libVersions.exoplayer"
-            implementation "com.google.android.exoplayer:extension-okhttp:$libVersions.exoplayer"
-
-            // date formatter
-            implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
-
-            // Version comparison
-            implementation 'org.apache.maven:maven-artifact:3.5.0'
-
-            // testing
-            testImplementation 'junit:junit:4.13'
-            androidTestImplementation 'androidx.test:runner:1.3.0'
-            androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-        }
     }
+
     signingConfigs {
         release {
             // You need to specify either an absolute path or include the
@@ -138,24 +90,51 @@ android {
 
 dependencies {
 
-    def room_version = "2.2.5"
-    def archLifecycleVersion = '2.1.0'
+    // Use kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    // Layouts and design
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
+    // font awesome
+    implementation 'com.mikepenz:iconics-core:3.1.0'
+    implementation 'com.mikepenz:fontawesome-typeface:5.3.1.1@aar'
+
+    // http client / REST
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // database lib
     implementation "androidx.room:room-runtime:$room_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    androidTestImplementation "androidx.room:room-testing:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
+    // image downloading and caching library
+    implementation('com.squareup.picasso:picasso') { version { strictly '2.8' } }
 
-    implementation 'androidx.preference:preference:1.1.1'
+    // Torrents and WebRTC
+    implementation 'com.github.TorrentStream:TorrentStream-Android:2.6.1'
+//            implementation "com.github.TorrentStream:TorrentStreamServer-Android:1.0.1"
+//            implementation 'org.webrtc:google-webrtc:1.0.+'
+
+    // video player  repo:jcenter()
+    implementation "com.google.android.exoplayer:exoplayer-core:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:extension-mediasession:$libVersions.exoplayer"
+    implementation "com.google.android.exoplayer:extension-okhttp:$libVersions.exoplayer"
+
+    // date formatter
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
+
+    // Version comparison
+    implementation 'org.apache.maven:maven-artifact:3.5.0'
 }
