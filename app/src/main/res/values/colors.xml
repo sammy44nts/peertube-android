@@ -4,7 +4,7 @@
     <color name="themeDeselected">#d69b9b9b</color>
     <color name="themeSelected">#e300aaff</color>
     <color name="seperator">#7ca6a6a6</color>
-    <color name="videoBackgroundColor">#000000</color>
+    <color name="videoBackgroundColor">@android:color/black</color>
 
 
     <!-- RED Theme -->
@@ -14,8 +14,8 @@
     <color name="secondaryColorRed">#FFC107</color>
     <color name="secondaryLightColorRed">#fccf4a</color>
     <color name="secondaryDarkColorRed">#e1a902</color>
-    <color name="primaryTextColorRed">#ffffff</color>
-    <color name="secondaryTextColorRed">#000000</color>
+    <color name="primaryTextColorRed">@android:color/white</color>
+    <color name="secondaryTextColorRed">@android:color/black</color>
 
     <!-- PINK Theme -->
     <color name="primaryColorPink">#E91E63</color>
@@ -24,8 +24,8 @@
     <color name="secondaryColorPink">#448AFF</color>
     <color name="secondaryLightColorPink">#89b3f8</color>
     <color name="secondaryDarkColorPink">#1a62da</color>
-    <color name="primaryTextColorPink">#000000</color>
-    <color name="secondaryTextColorPink">#000000</color>
+    <color name="primaryTextColorPink">@android:color/black</color>
+    <color name="secondaryTextColorPink">@android:color/black</color>
 
     <!-- PURPLE Theme -->
     <color name="primaryColorPurple">#9C27B0</color>
@@ -34,8 +34,8 @@
     <color name="secondaryColorPurple">#CDDC39</color>
     <color name="secondaryLightColorPurple">#e1ea86</color>
     <color name="secondaryDarkColorPurple">#b4c320</color>
-    <color name="primaryTextColorPurple">#ffffff</color>
-    <color name="secondaryTextColorPurple">#000000</color>
+    <color name="primaryTextColorPurple">@android:color/white</color>
+    <color name="secondaryTextColorPurple">@android:color/black</color>
 
 
     <!-- DEEPPURPLE Theme -->
@@ -45,8 +45,8 @@
     <color name="secondaryColorDeepPurple">#FFEB3B</color>
     <color name="secondaryLightColorDeepPurple">#fff599</color>
     <color name="secondaryDarkColorDeepPurple">#e0cd24</color>
-    <color name="primaryTextColorDeepPurple">#ffffff</color>
-    <color name="secondaryTextColorDeepPurple">#000000</color>
+    <color name="primaryTextColorDeepPurple">@android:color/white</color>
+    <color name="secondaryTextColorDeepPurple">@android:color/black</color>
 
     <!-- INDIGO Theme -->
     <color name="primaryColorIndigo">#3F51B5</color>
@@ -55,8 +55,8 @@
     <color name="secondaryColorIndigo">#FF9800</color>
     <color name="secondaryLightColorIndigo">#feba56</color>
     <color name="secondaryDarkColorIndigo">#cf7b00</color>
-    <color name="primaryTextColorIndigo">#ffffff</color>
-    <color name="secondaryTextColorIndigo">#000000</color>
+    <color name="primaryTextColorIndigo">@android:color/white</color>
+    <color name="secondaryTextColorIndigo">@android:color/black</color>
 
     <!-- BLUE Theme -->
     <color name="primaryColorBlue">#1e88e5</color>
@@ -65,8 +65,8 @@
     <color name="secondaryColorBlue">#607D8B</color>
     <color name="secondaryLightColorBlue">#CFD8DC</color>
     <color name="secondaryDarkColorBlue">#455A64</color>
-    <color name="primaryTextColorBlue">#000000</color>
-    <color name="secondaryTextColorBlue">#000000</color>
+    <color name="primaryTextColorBlue">@android:color/black</color>
+    <color name="secondaryTextColorBlue">@android:color/black</color>
 
     <!-- LIGHTBLUE Theme -->
     <color name="primaryColorLightBlue">#039be5</color>
@@ -75,8 +75,8 @@
     <color name="secondaryColorLightBlue">#CDDC39</color>
     <color name="secondaryLightColorLightBlue">#F0F4C3</color>
     <color name="secondaryDarkColorLightBlue">#AFB42B</color>
-    <color name="primaryTextColorLightBlue">#000000</color>
-    <color name="secondaryTextColorLightBlue">#000000</color>
+    <color name="primaryTextColorLightBlue">@android:color/black</color>
+    <color name="secondaryTextColorLightBlue">@android:color/black</color>
 
     <!-- CYAN Theme -->
     <color name="primaryColorCyan">#00acc1</color>
@@ -85,8 +85,8 @@
     <color name="secondaryColorCyan">#f50057</color>
     <color name="secondaryLightColorCyan">#ff5983</color>
     <color name="secondaryDarkColorCyan">#bb002f</color>
-    <color name="primaryTextColorCyan">#000000</color>
-    <color name="secondaryTextColorCyan">#000000</color>
+    <color name="primaryTextColorCyan">@android:color/black</color>
+    <color name="secondaryTextColorCyan">@android:color/black</color>
 
     <!-- TEAL Theme -->
     <color name="primaryColorTeal">#00796b</color>
@@ -95,8 +95,8 @@
     <color name="secondaryColorTeal">#ffd180</color>
     <color name="secondaryLightColorTeal">#ffffb1</color>
     <color name="secondaryDarkColorTeal">#caa052</color>
-    <color name="primaryTextColorTeal">#ffffff</color>
-    <color name="secondaryTextColorTeal">#000000</color>
+    <color name="primaryTextColorTeal">@android:color/white</color>
+    <color name="secondaryTextColorTeal">@android:color/black</color>
 
 
 
@@ -107,8 +107,8 @@
     <color name="secondaryColorGreen">#00BCD4</color>
     <color name="secondaryLightColorGreen">#6cd1de</color>
     <color name="secondaryDarkColorGreen">#0197ab</color>
-    <color name="primaryTextColorGreen">#ffffff</color>
-    <color name="secondaryTextColorGreen">#000000</color>
+    <color name="primaryTextColorGreen">@android:color/white</color>
+    <color name="secondaryTextColorGreen">@android:color/black</color>
 
     <!-- LIGHTGREEN Theme -->
     <color name="primaryColorLightGreen">#8BC34A</color>
@@ -117,8 +117,8 @@
     <color name="secondaryColorLightGreen">#448AFF</color>
     <color name="secondaryLightColorLightGreen">#83affa</color>
     <color name="secondaryDarkColorLightGreen">#1e58b8</color>
-    <color name="primaryTextColorLightGreen">#ffffff</color>
-    <color name="secondaryTextColorLightGreen">#000000</color>
+    <color name="primaryTextColorLightGreen">@android:color/white</color>
+    <color name="secondaryTextColorLightGreen">@android:color/black</color>
 
     <!-- Lime Theme -->
     <color name="primaryColorLime">#CDDC39</color>
@@ -127,8 +127,8 @@
     <color name="secondaryColorLime">#7C4DFF</color>
     <color name="secondaryLightColorLime">#ae94f5</color>
     <color name="secondaryDarkColorLime">#4f2cb3</color>
-    <color name="primaryTextColorLime">#ffffff</color>
-    <color name="secondaryTextColorLime">#000000</color>
+    <color name="primaryTextColorLime">@android:color/white</color>
+    <color name="secondaryTextColorLime">@android:color/black</color>
 
     <!-- YELLOW Theme -->
     <color name="primaryColorYellow">#FFEB3B</color>
@@ -137,8 +137,8 @@
     <color name="secondaryColorYellow">#536DFE</color>
     <color name="secondaryLightColorYellow">#8799fd</color>
     <color name="secondaryDarkColorYellow">#3751e1</color>
-    <color name="primaryTextColorYellow">#ffffff</color>
-    <color name="secondaryTextColorYellow">#000000</color>
+    <color name="primaryTextColorYellow">@android:color/white</color>
+    <color name="secondaryTextColorYellow">@android:color/black</color>
 
     <!-- AMBER Theme -->
     <color name="primaryColorAmber">#FFC107</color>
@@ -147,8 +147,8 @@
     <color name="secondaryColorAmber">#03A9F4</color>
     <color name="secondaryLightColorAmber">#65c4ef</color>
     <color name="secondaryDarkColorAmber">#1e87b6</color>
-    <color name="primaryTextColorAmber">#ffffff</color>
-    <color name="secondaryTextColorAmber">#000000</color>
+    <color name="primaryTextColorAmber">@android:color/white</color>
+    <color name="secondaryTextColorAmber">@android:color/black</color>
 
     <!-- ORANGE Theme -->
     <color name="primaryColorOrange">#FF9800</color>
@@ -157,8 +157,8 @@
     <color name="secondaryColorOrange">#8BC34A</color>
     <color name="secondaryLightColorOrange">#b4e67a</color>
     <color name="secondaryDarkColorOrange">#649131</color>
-    <color name="primaryTextColorOrange">#ffffff</color>
-    <color name="secondaryTextColorOrange">#000000</color>
+    <color name="primaryTextColorOrange">@android:color/white</color>
+    <color name="secondaryTextColorOrange">@android:color/black</color>
 
     <!-- DEEPORANGE Theme -->
     <color name="primaryColorDeepOrange">#FF5722</color>
@@ -167,8 +167,8 @@
     <color name="secondaryColorDeepOrange">#00BCD4</color>
     <color name="secondaryLightColorDeepOrange">#75e8f6</color>
     <color name="secondaryDarkColorDeepOrange">#2a9cab</color>
-    <color name="primaryTextColorDeepOrange">#ffffff</color>
-    <color name="secondaryTextColorDeepOrange">#000000</color>
+    <color name="primaryTextColorDeepOrange">@android:color/white</color>
+    <color name="secondaryTextColorDeepOrange">@android:color/black</color>
 
     <!-- BROWN Theme -->
     <color name="primaryColorBrown">#795548</color>
@@ -177,8 +177,8 @@
     <color name="secondaryColorBrown">#FFC107</color>
     <color name="secondaryLightColorBrown">#f6c83f</color>
     <color name="secondaryDarkColorBrown">#cf9c02</color>
-    <color name="primaryTextColorBrown">#ffffff</color>
-    <color name="secondaryTextColorBrown">#000000</color>
+    <color name="primaryTextColorBrown">@android:color/white</color>
+    <color name="secondaryTextColorBrown">@android:color/black</color>
 
     <!-- GRAY Theme -->
     <color name="primaryColorGray">#9E9E9E</color>
@@ -187,8 +187,8 @@
     <color name="secondaryColorGray">#536DFE</color>
     <color name="secondaryLightColorGray">#94a5ff</color>
     <color name="secondaryDarkColorGray">#2c44c9</color>
-    <color name="primaryTextColorGray">#ffffff</color>
-    <color name="secondaryTextColorGray">#000000</color>
+    <color name="primaryTextColorGray">@android:color/white</color>
+    <color name="secondaryTextColorGray">@android:color/black</color>
 
     <!-- BLUEGRAY Theme -->
     <color name="primaryColorBlueGray">#607D8B</color>
@@ -197,6 +197,6 @@
     <color name="secondaryColorBlueGray">#CDDC39</color>
     <color name="secondaryLightColorBlueGray">#e3f15c</color>
     <color name="secondaryDarkColorBlueGray">#a6b320</color>
-    <color name="primaryTextColorBlueGray">#ffffff</color>
-    <color name="secondaryTextColorBlueGray">#000000</color>
+    <color name="primaryTextColorBlueGray">@android:color/white</color>
+    <color name="secondaryTextColorBlueGray">@android:color/black</color>
 </resources>

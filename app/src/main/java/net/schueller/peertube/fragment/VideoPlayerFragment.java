@@ -99,7 +99,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             mService = binder.getService();
 
             // 2. Create the player
-            simpleExoPlayerView.setPlayer(mService.player);
+            simpleExoPlayerView.setPlayer(mService.getPlayer());
             mBound = true;
 
             loadVideo();
@@ -271,19 +271,19 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
 
     public void pauseVideo() {
         if (mBound) {
-            mService.player.setPlayWhenReady(false);
+            mService.getPlayer().setPlayWhenReady(false);
         }
     }
 
     public void pauseToggle() {
         if (mBound) {
-            mService.player.setPlayWhenReady(!mService.player.getPlayWhenReady());
+            mService.getPlayer().setPlayWhenReady(!mService.getPlayer().getPlayWhenReady());
         }
     }
 
     public void unPauseVideo() {
         if (mBound) {
-            mService.player.setPlayWhenReady(true);
+            mService.getPlayer().setPlayWhenReady(true);
         }
     }
 
@@ -292,7 +292,7 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
     }
 
     public boolean isPaused() {
-        return !mService.player.getPlayWhenReady();
+        return !mService.getPlayer().getPlayWhenReady();
     }
 
     public void showControls(boolean value) {
