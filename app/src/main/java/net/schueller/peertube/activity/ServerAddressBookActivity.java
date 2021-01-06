@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.schueller.peertube.CommonActivity;
 import net.schueller.peertube.R;
 import net.schueller.peertube.adapter.ServerListAdapter;
 import net.schueller.peertube.database.Server;
@@ -43,7 +44,6 @@ import net.schueller.peertube.fragment.AddServerFragment;
 import java.util.Objects;
 
 public class ServerAddressBookActivity extends CommonActivity implements AddServerFragment.OnFragmentInteractionListener {
-
     private final String TAG = "ServerAddressBookActiv";
     public static final String EXTRA_REPLY = "net.schueller.peertube.room.REPLY";
 
@@ -51,6 +51,10 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
     private AddServerFragment addServerFragment;
     private FloatingActionButton floatingActionButton;
     private FragmentManager fragmentManager;
+
+    ServerAddressBookActivity() {
+        super(R.layout.activity_server_address_book);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -61,8 +65,6 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server_address_book);
-
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.tool_bar_server_address_book);
         // Setting toolbar as the ActionBar with setSupportActionBar() call
@@ -94,14 +96,11 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
-
 
     public void showServers() {
         RecyclerView recyclerView = findViewById(R.id.server_list_recyclerview);
@@ -175,7 +174,5 @@ public class ServerAddressBookActivity extends CommonActivity implements AddServ
     }
 
     public void testServer() {
-
     }
-
 }

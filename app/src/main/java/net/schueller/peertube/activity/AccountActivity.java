@@ -38,6 +38,7 @@ import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.squareup.picasso.Picasso;
 
+import net.schueller.peertube.CommonActivity;
 import net.schueller.peertube.R;
 import net.schueller.peertube.adapter.ChannelAdapter;
 import net.schueller.peertube.adapter.VideoAdapter;
@@ -53,6 +54,7 @@ import net.schueller.peertube.network.GetVideoDataService;
 import net.schueller.peertube.network.RetrofitInstance;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -62,61 +64,54 @@ import retrofit2.Response;
 
 
 public class AccountActivity extends CommonActivity {
-
     private final String TAG = "AccountActivity";
     private String apiBaseURL;
-
     private Integer videosStart, videosCount, videosCurrentStart;
     private String videosFilter, videosSort, videosNsfw;
     private Set<String> videosLanguages;
-
     private ChannelAdapter channelAdapter;
     private VideoAdapter videoAdapter;
-
     private RecyclerView recyclerViewVideos;
     private RecyclerView recyclerViewChannels;
-
     private SwipeRefreshLayout swipeRefreshLayoutVideos;
     private SwipeRefreshLayout swipeRefreshLayoutChannels;
     private CoordinatorLayout aboutView;
     //private TextView emptyView;
-
     private Boolean isLoadingVideos;
-
     private GetUserService userService;
-
     private String displayNameAndHost;
+
+    AccountActivity() {
+        super(R.layout.activity_account);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // close this activity as oppose to navigating up
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_account);
-
         apiBaseURL = APIUrlHelper.getUrlWithVersion(this);
-
-        userService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(this)).create(GetUserService.class);
-
+        userService = RetrofitInstance
+                .getRetrofitInstance(this, apiBaseURL, APIUrlHelper.useInsecureConnection(this))
+                .create(GetUserService.class);
         recyclerViewVideos = findViewById(R.id.account_video_recyclerView);
         recyclerViewChannels = findViewById(R.id.account_channel_recyclerView);
-
         swipeRefreshLayoutVideos = findViewById(R.id.account_swipeRefreshLayout_videos);
         swipeRefreshLayoutChannels = findViewById(R.id.account_swipeRefreshLayout_channels);
         aboutView = findViewById(R.id.account_about);
-
         RecyclerView.LayoutManager layoutManagerVideos = new LinearLayoutManager(AccountActivity.this);
-        recyclerViewVideos.setLayoutManager(layoutManagerVideos);
-
         RecyclerView.LayoutManager layoutManagerVideosChannels = new LinearLayoutManager(AccountActivity.this);
-        recyclerViewChannels.setLayoutManager(layoutManagerVideosChannels);
-
         videoAdapter = new VideoAdapter(new ArrayList<>(), AccountActivity.this);
-        recyclerViewVideos.setAdapter(videoAdapter);
-
         channelAdapter = new ChannelAdapter(new ArrayList<>(), AccountActivity.this);
+
+        recyclerViewVideos.setLayoutManager(layoutManagerVideos);
+        recyclerViewChannels.setLayoutManager(layoutManagerVideosChannels);
+        recyclerViewVideos.setAdapter(videoAdapter);
         recyclerViewChannels.setAdapter(channelAdapter);
-
-
         swipeRefreshLayoutVideos.setOnRefreshListener(() -> {
             // Refresh items
             if (!isLoadingVideos) {
@@ -154,15 +149,7 @@ public class AccountActivity extends CommonActivity {
 
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish(); // close this activity as oppose to navigating up
-
-        return false;
-    }
-
     private void loadAccount(String ownerString) {
-
         // get video details from api
         Call<Account> call = userService.getAccount(ownerString);
 
@@ -184,7 +171,8 @@ public class AccountActivity extends CommonActivity {
                     ownerStringView.setText(owner);
 
                     TextView followers = findViewById(R.id.account_followers);
-                    followers.setText(account.getFollowersCount().toString());
+                    String followersCount = account.getFollowersCount().toString();
+                    followers.setText(followersCount);
 
                     TextView description = findViewById(R.id.account_description);
                     description.setText(account.getDescription());
@@ -222,10 +210,10 @@ public class AccountActivity extends CommonActivity {
 
 
     private void loadAccountVideos(String displayNameAndHost) {
-
         isLoadingVideos = false;
-
-        GetVideoDataService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(this)).create(GetVideoDataService.class);
+        GetVideoDataService service = RetrofitInstance
+                .getRetrofitInstance(this, apiBaseURL, APIUrlHelper.useInsecureConnection(this))
+                .create(GetVideoDataService.class);
         Call<VideoList> call;
 
         call = service.getAccountVideosData(displayNameAndHost, videosStart, videosCount, videosSort);
@@ -264,24 +252,17 @@ public class AccountActivity extends CommonActivity {
     }
 
     private void loadAccountChannels(String displayNameAndHost) {
-
         // get video details from api
         Call<ChannelList> call = userService.getAccountChannels(displayNameAndHost);
 
         call.enqueue(new Callback<ChannelList>() {
             @Override
             public void onResponse(@NonNull Call<ChannelList> call, @NonNull Response<ChannelList> response) {
-
-
                 if (response.isSuccessful()) {
                     ChannelList channelList = response.body();
-
-
                 } else {
                     ErrorHelper.showToastFromCommunicationError(AccountActivity.this, null);
                 }
-
-
             }
 
             @Override
@@ -294,7 +275,6 @@ public class AccountActivity extends CommonActivity {
 
 
     private void createBottomBarNavigation() {
-
         // Get Bottom Navigation
         BottomNavigationView navigation = findViewById(R.id.account_navigation);
 
@@ -312,34 +292,26 @@ public class AccountActivity extends CommonActivity {
 
         // Click Listener
         navigation.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.account_navigation_about:
-
-                    swipeRefreshLayoutVideos.setVisibility(View.GONE);
-                    swipeRefreshLayoutChannels.setVisibility(View.GONE);
-                    aboutView.setVisibility(View.VISIBLE);
-                    loadAccount(displayNameAndHost);
-
-                    return true;
-                case R.id.account_navigation_channels:
-
-                    swipeRefreshLayoutVideos.setVisibility(View.GONE);
-                    swipeRefreshLayoutChannels.setVisibility(View.VISIBLE);
-                    aboutView.setVisibility(View.GONE);
-                    loadAccountChannels(displayNameAndHost);
-
-                    return true;
-                case R.id.account_navigation_videos:
-
+            int id = menuItem.getItemId();
+            if (id == R.id.account_navigation_about) {
+                swipeRefreshLayoutVideos.setVisibility(View.GONE);
+                swipeRefreshLayoutChannels.setVisibility(View.GONE);
+                aboutView.setVisibility(View.VISIBLE);
+                loadAccount(displayNameAndHost);
+                return true;
+            } else if (id == R.id.account_navigation_channels) {
+                swipeRefreshLayoutVideos.setVisibility(View.GONE);
+                swipeRefreshLayoutChannels.setVisibility(View.VISIBLE);
+                aboutView.setVisibility(View.GONE);
+                loadAccountChannels(displayNameAndHost);
+                return true;
+            } else if (id == R.id.account_navigation_videos) {
                     swipeRefreshLayoutVideos.setVisibility(View.VISIBLE);
                     swipeRefreshLayoutChannels.setVisibility(View.GONE);
                     aboutView.setVisibility(View.GONE);
                     loadAccountVideos(displayNameAndHost);
-
                     return true;
-
-            }
-            return false;
+            } else return false;
         });
 
     }

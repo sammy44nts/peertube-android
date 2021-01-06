@@ -43,7 +43,6 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.ServerViewHolder> {
-
     private List<Server> mServers; // Cached copy of Servers
 
     @NonNull
@@ -76,15 +75,11 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Se
         holder.itemView.setOnClickListener(v -> {
             Context context = v.getContext();
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = sharedPref.edit();
-
             String serverUrl = APIUrlHelper.cleanServerUrl(getServerAtPosition(position).getServerHost());
-
-            editor.putString(context.getString(R.string.pref_api_base_key), serverUrl);
-            editor.apply();
+            sharedPref.edit().putString(context.getString(R.string.pref_api_base_key), serverUrl).apply();
 
             // Logout if logged in
-            Session session = Session.getInstance();
+            Session session = Session.getInstance(context);
             if (session.isLoggedIn()) {
                 session.invalidate();
             }
@@ -92,6 +87,7 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Se
             // attempt authentication if we have a username
             if (!TextUtils.isEmpty(getServerAtPosition(position).getUsername())) {
                 LoginService.Authenticate(
+                        holder.hasLogin.getContext().getApplicationContext(),
                         getServerAtPosition(position).getUsername(),
                         getServerAtPosition(position).getPassword()
                 );

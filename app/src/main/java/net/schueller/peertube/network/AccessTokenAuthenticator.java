@@ -16,6 +16,7 @@
  */
 package net.schueller.peertube.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -27,16 +28,17 @@ import okhttp3.Response;
 import okhttp3.Route;
 
 public class AccessTokenAuthenticator implements Authenticator {
-
     private static final String TAG = "ATAuthenticator";
+    private final Context context;
 
-    public AccessTokenAuthenticator() {
+    public AccessTokenAuthenticator(Context context) {
+        this.context = context;
     }
 
     @Nullable
     @Override
     public Request authenticate(Route route, @NonNull Response response) {
-        Session session = Session.getInstance();
+        Session session = Session.getInstance(context);
 
         // check if we are using tokens
         final String accessToken = session.getToken();
@@ -61,7 +63,7 @@ public class AccessTokenAuthenticator implements Authenticator {
 
             // Need to refresh an access token
             Log.v(TAG, "Need to refresh an access token");
-            final String updatedAccessToken = session.refreshAccessToken();
+            final String updatedAccessToken = session.refreshAccessToken(context);
             if (updatedAccessToken != null) {
                 return newRequestWithAccessToken(response.request(), updatedAccessToken);
             }

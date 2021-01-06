@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import net.schueller.peertube.CommonActivity;
 import net.schueller.peertube.R;
 import net.schueller.peertube.adapter.ServerSearchAdapter;
 import net.schueller.peertube.helper.APIUrlHelper;
@@ -46,21 +47,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchServerActivity extends CommonActivity {
-
     private ServerSearchAdapter serverAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText searchTextView;
-
-    private final static String TAG = "SearchServerActivity";
-
     private int currentStart = 0;
     private final int count = 12;
     private String lastSearchtext = "";
-
     private TextView emptyView;
     private RecyclerView recyclerView;
-
     private boolean isLoading = false;
+
+    SearchServerActivity() {
+        super(R.layout.activity_search_server);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -71,8 +70,6 @@ public class SearchServerActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_server);
-
         // Attaching the layout to the toolbar object
         Toolbar toolbar = findViewById(R.id.tool_bar_server_selection);
         // Setting toolbar as the ActionBar with setSupportActionBar() call
@@ -144,10 +141,9 @@ public class SearchServerActivity extends CommonActivity {
 
     private void loadServers(int start, int count, String searchtext) {
         isLoading = true;
-
-        GetServerListDataService service = RetrofitInstance.getRetrofitInstance(
-                APIUrlHelper.getServerIndexUrl(SearchServerActivity.this)
-                , APIUrlHelper.useInsecureConnection(this)).create(GetServerListDataService.class);
+        GetServerListDataService service = RetrofitInstance
+                .getRetrofitInstance(this, APIUrlHelper.getServerIndexUrl(SearchServerActivity.this), APIUrlHelper.useInsecureConnection(this))
+                .create(GetServerListDataService.class);
 
         if (!searchtext.equals(lastSearchtext)) {
             currentStart = 0;

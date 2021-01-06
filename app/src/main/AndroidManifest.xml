@@ -5,10 +5,9 @@
     <!-- required to play video in background via notification -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- connect to peertube server -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- required for torrent downloading -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="19"/>
 
     <application
-        android:name=".application.AppApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -53,7 +52,7 @@
             android:label="@string/title_activity_select_server"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- Me -->
         <activity
-            android:name=".activity.MeActivity"
+            android:name=".MeActivity"
             android:label="@string/title_activity_me"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- Account -->
         <activity

@@ -22,82 +22,74 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
-import net.schueller.peertube.application.AppApplication;
 
 import static net.schueller.peertube.service.LoginService.refreshToken;
 
 public class Session {
-
     private static volatile Session sSoleInstance;
-    private static SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
+    private final String prefAuthUsername;
+    private final String prefAuthPassword;
+    private final String prefTokenAccess;
+    private final String prefTokenRefresh;
+    private final String prefTokenType;
 
-    //private constructor.
-    private Session() {
-
-        Context context = AppApplication.getContext();
+    // private constructor.
+    private Session(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        prefAuthUsername = context.getString(R.string.pref_auth_username);
+        prefAuthPassword = context.getString(R.string.pref_auth_password);
+        prefTokenAccess = context.getString(R.string.pref_token_access);
+        prefTokenRefresh = context.getString(R.string.pref_token_refresh);
+        prefTokenType = context.getString(R.string.pref_token_type);
 
-        //Prevent form the reflection api.
+        // Prevent from the reflection api.
         if (sSoleInstance != null) {
             throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
         }
     }
 
-    public static Session getInstance() {
-        if (sSoleInstance == null) { //if there is no instance available... create new one
+    public static Session getInstance(Context context) {
+        if (sSoleInstance == null) { // if there is no instance available... create new one
             synchronized (Session.class) {
-                if (sSoleInstance == null) sSoleInstance = new Session();
+                if (sSoleInstance == null) sSoleInstance = new Session(context);
             }
         }
 
         return sSoleInstance;
     }
 
-    //Make singleton from serialize and deserialize operation.
-    protected Session readResolve() {
-        return getInstance();
-    }
-
-
     public boolean isLoggedIn() {
         // check if token exist or not
         // return true if exist otherwise false
         // assuming that token exists
 
-        //Log.v("Session", "isLoggedIn: " + (getToken() != null));
+        // Log.v("Session", "isLoggedIn: " + (getToken() != null));
 
         return getToken() != null;
     }
 
     public String getToken() {
         // return the token that was saved earlier
-
-        String token = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_token_access), null);
-        String type = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_token_type), "Bearer");
-
-        if (token != null) {
-            return type + " " + token;
-        }
-
-        return null;
+        String token = sharedPreferences.getString(prefTokenAccess, null);
+        String type = sharedPreferences.getString(prefTokenType, "Bearer");
+        if (token != null) return type + " " + token;
+        else return null;
     }
 
     public String getPassword() {
-        return sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_auth_password), null);
+        return sharedPreferences.getString(prefAuthPassword, null);
 
     }
 
     public String getRefreshToken() {
-        return sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_token_refresh), null);
+        return sharedPreferences.getString(prefTokenRefresh, null);
 
     }
 
-    public String refreshAccessToken() {
-
-        refreshToken();
-        // refresh token
-
-        return this.getToken();
+    public String refreshAccessToken(Context context) {
+        refreshToken(context);
+        return getToken();
     }
 
     public void invalidate() {
@@ -105,15 +97,11 @@ public class Session {
         // delete token and other user info
         // (i.e: email, password)
         // from the storage
-
-        Context context = AppApplication.getContext();
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_auth_password), null);
-        editor.putString(context.getString(R.string.pref_auth_username), null);
-        editor.putString(context.getString(R.string.pref_token_access), null);
-        editor.putString(context.getString(R.string.pref_token_refresh), null);
-
-        editor.apply();
+        sharedPreferences.edit()
+                .putString(prefAuthUsername, null)
+                .putString(prefAuthPassword, null)
+                .putString(prefTokenAccess, null)
+                .putString(prefTokenRefresh, null)
+                .apply();
     }
 }

@@ -17,6 +17,7 @@
 
 package net.schueller.peertube.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,20 +29,20 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AuthorizationInterceptor implements Interceptor {
+    private final Context context;
 
-    public AuthorizationInterceptor() {
+    public AuthorizationInterceptor(Context context) {
+        this.context = context;
     }
 
     @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-
-        Session session = Session.getInstance();
         Response mainResponse;
+        Session session = Session.getInstance(context);
         Request mainRequest = chain.request();
 
         if (session.isLoggedIn()) {
-
             // add authentication header to each request if we are logged in
             Request.Builder builder = mainRequest.newBuilder().header("Authorization", session.getToken()).
                     method(mainRequest.method(), mainRequest.body());
@@ -56,12 +57,8 @@ public class AuthorizationInterceptor implements Interceptor {
                 session.invalidate();
                 Log.v("Authorization", "Intercept: Logout forced");
             }
-
-        } else {
-            mainResponse = chain.proceed(chain.request());
-        }
+        } else mainResponse = chain.proceed(chain.request());
 
         return mainResponse;
     }
-
 }

@@ -97,7 +97,9 @@ public class VideoMetaDataFragment extends Fragment {
         Activity activity = requireActivity();
 
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-        GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(activity)).create(GetVideoDataService.class);
+        GetVideoDataService videoDataService = RetrofitInstance
+                .getRetrofitInstance(getContext(), apiBaseURL, APIUrlHelper.useInsecureConnection(activity))
+                .create(GetVideoDataService.class);
 
         // Thumbs up
         Button thumbsUpButton = activity.findViewById(R.id.video_thumbs_up);
@@ -118,7 +120,7 @@ public class VideoMetaDataFragment extends Fragment {
         updateVideoRating(video);
 
         // Retrieve which rating the user gave to this video
-        if (Session.getInstance().isLoggedIn()) {
+        if (Session.getInstance(getContext()).isLoggedIn()) {
             Call<Rating> call = videoDataService.getVideoRating(video.getId());
             call.enqueue(new Callback<Rating>() {
 
@@ -234,18 +236,16 @@ public class VideoMetaDataFragment extends Fragment {
         moreButton.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, v);
             popup.setOnMenuItemClickListener(menuItem -> {
-                switch (menuItem.getItemId()) {
-                    case R.id.video_more_report:
-                        Log.v(TAG, "Report");
-                        Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.video_more_blacklist:
-                        Log.v(TAG, "Blacklist");
-                        Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
-                        return true;
-                    default:
-                        return false;
-                }
+                int id = menuItem.getItemId();
+                if (id == R.id.video_more_report) {
+                    Log.v(TAG, "Report");
+                    Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.video_more_blacklist) {
+                    Log.v(TAG, "Blacklist");
+                    Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else return false;
             });
             popup.inflate(R.menu.menu_video_more);
             popup.show();
@@ -300,7 +300,7 @@ public class VideoMetaDataFragment extends Fragment {
     }
 
     void rateVideo(Boolean like, Video video) {
-        if (Session.getInstance().isLoggedIn()) {
+        if (Session.getInstance(getContext()).isLoggedIn()) {
             final String ratePayload;
 
             switch (videoRating.getRating()) {
@@ -319,7 +319,9 @@ public class VideoMetaDataFragment extends Fragment {
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"), "{\"rating\":\"" + ratePayload + "\"}");
 
             String apiBaseURL = APIUrlHelper.getUrlWithVersion(getContext());
-            GetVideoDataService videoDataService = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity())).create(GetVideoDataService.class);
+            GetVideoDataService videoDataService = RetrofitInstance
+                    .getRetrofitInstance(getContext(), apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity()))
+                    .create(GetVideoDataService.class);
 
             Call<ResponseBody> call = videoDataService.rateVideo(video.getId(), body);
 

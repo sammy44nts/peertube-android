@@ -179,25 +179,22 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
 
         // get video details from api
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-        GetVideoDataService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity())).create(GetVideoDataService.class);
+        GetVideoDataService service = RetrofitInstance
+                .getRetrofitInstance(getContext(), apiBaseURL, APIUrlHelper.useInsecureConnection(requireActivity()))
+                .create(GetVideoDataService.class);
 
         Call<Video> call = service.getVideoData(mVideoUuid);
 
         call.enqueue(new Callback<Video>() {
             @Override
             public void onResponse(@NonNull Call<Video> call, @NonNull Response<Video> response) {
-
                 Video video = response.body();
-
-                mService.setCurrentVideo(video);
-
                 if (video == null) {
                     Toast.makeText(context, "Unable to retrieve video information, try again later.", Toast.LENGTH_SHORT).show();
-                    return;
+                } else {
+                    mService.setCurrentVideo(video);
+                    playVideo(video);
                 }
-
-                playVideo(video);
-
             }
 
             @Override
@@ -339,14 +336,15 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
      * @return torrent stream
      */
     private TorrentStream setupTorrentStream() {
-
+        java.io.File downloadDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        if (!Environment.getExternalStorageState(downloadDir).equals(Environment.MEDIA_MOUNTED)) {
+            downloadDir = requireActivity().getFilesDir();
+        }
         TorrentOptions torrentOptions = new TorrentOptions.Builder()
-                .saveLocation(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
+                .saveLocation(downloadDir)
                 .removeFilesAfterStop(true)
                 .build();
-
         TorrentStream torrentStream = TorrentStream.init(torrentOptions);
-
         torrentStream.addListener(new TorrentListener() {
             @Override
             public void onStreamReady(Torrent torrent) {
@@ -383,7 +381,6 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
             public void onStreamError(Torrent torrent, Exception e) {
                 Log.d(TAG, "Error: " + e.getMessage());
             }
-
         });
 
         return torrentStream;
@@ -431,7 +428,6 @@ public class VideoPlayerFragment extends Fragment implements VideoRendererEventL
         public boolean onTouch(View v, MotionEvent event) {
             return mDetector.onTouchEvent(event);
         }
-
     };
 
     public String getVideoUuid() {

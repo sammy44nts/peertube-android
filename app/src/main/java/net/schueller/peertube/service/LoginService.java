@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import net.schueller.peertube.R;
-import net.schueller.peertube.application.AppApplication;
 import net.schueller.peertube.helper.APIUrlHelper;
 import net.schueller.peertube.model.OauthClient;
 import net.schueller.peertube.model.Token;
@@ -36,39 +35,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static net.schueller.peertube.application.AppApplication.getContext;
-
 public class LoginService {
-
     private static final String TAG = "LoginService";
 
-    public static void Authenticate(String username, String password) {
-        Context context = getContext();
-
+    public static void Authenticate(Context context, String username, String password) {
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        AuthenticationService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(context)).create(AuthenticationService.class);
+        AuthenticationService service = RetrofitInstance
+                .getRetrofitInstance(context, apiBaseURL, APIUrlHelper.useInsecureConnection(context))
+                .create(AuthenticationService.class);
 
         Call<OauthClient> call = service.getOauthClientLocal();
 
         call.enqueue(new Callback<OauthClient>() {
             @Override
             public void onResponse(@NonNull Call<OauthClient> call, @NonNull Response<OauthClient> response) {
-
                 if (response.isSuccessful()) {
-
                     OauthClient oauthClient = response.body();
-
-                    SharedPreferences.Editor editor = sharedPref.edit();
-
                     assert oauthClient != null;
-
-                    editor.putString(context.getString(R.string.pref_client_id), oauthClient.getClientId());
-                    editor.putString(context.getString(R.string.pref_client_secret), oauthClient.getClientSecret());
-                    editor.apply();
-
+                    sharedPref.edit()
+                            .putString(context.getString(R.string.pref_client_id), oauthClient.getClientId())
+                            .putString(context.getString(R.string.pref_client_secret), oauthClient.getClientSecret())
+                            .apply();
                     Call<Token> call2 = service.getAuthenticationToken(
                             oauthClient.getClientId(),
                             oauthClient.getClientSecret(),
@@ -81,26 +69,19 @@ public class LoginService {
                     call2.enqueue(new Callback<Token>() {
                         @Override
                         public void onResponse(@NonNull Call<Token> call2, @NonNull retrofit2.Response<Token> response2) {
-
                             if (response2.isSuccessful()) {
-
                                 Token token = response2.body();
-
                                 assert token != null;
-                                editor.putString(context.getString(R.string.pref_token_access), token.getAccessToken());
-                                editor.putString(context.getString(R.string.pref_token_refresh), token.getRefreshToken());
-                                editor.putString(context.getString(R.string.pref_token_type), token.getTokenType());
-                                editor.apply();
-
+                                sharedPref.edit()
+                                        .putString(context.getString(R.string.pref_token_access), token.getAccessToken())
+                                        .putString(context.getString(R.string.pref_token_refresh), token.getRefreshToken())
+                                        .putString(context.getString(R.string.pref_token_type), token.getTokenType())
+                                        .apply();
                                 Log.wtf(TAG, "Logged in");
-
                                 Toast.makeText(context, context.getString(R.string.authentication_login_success), Toast.LENGTH_LONG).show();
-
-
                             } else {
                                 Log.wtf(TAG, response2.toString());
                                 Toast.makeText(context, context.getString(R.string.authentication_login_failed), Toast.LENGTH_LONG).show();
-
                             }
                         }
 
@@ -113,7 +94,7 @@ public class LoginService {
                     });
 
                 } else {
-                    Log.wtf(TAG, response.toString());
+                    // Log.wtf(TAG, response.toString());
                     Toast.makeText(context, context.getString(R.string.authentication_login_failed), Toast.LENGTH_LONG).show();
 
                 }
@@ -121,25 +102,24 @@ public class LoginService {
 
             @Override
             public void onFailure(@NonNull Call<OauthClient> call, @NonNull Throwable t) {
-                Log.wtf("err", t.fillInStackTrace());
+                // Log.wtf("err", t.fillInStackTrace());
                 Toast.makeText(context, context.getString(R.string.authentication_login_failed), Toast.LENGTH_LONG).show();
 
             }
         });
     }
 
-    public static void refreshToken() {
-        Context context = getContext();
-
+    public static void refreshToken(Context context) {
         String apiBaseURL = APIUrlHelper.getUrlWithVersion(context);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        AuthenticationService service = RetrofitInstance.getRetrofitInstance(apiBaseURL, APIUrlHelper.useInsecureConnection(context)).create(AuthenticationService.class);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        AuthenticationService service = RetrofitInstance
+                .getRetrofitInstance(context, apiBaseURL, APIUrlHelper.useInsecureConnection(context))
+                .create(AuthenticationService.class);
 
-        String refreshToken = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_token_refresh), null);
-        String userName = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_auth_username), null);
-        String clientId = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_client_id), null);
-        String clientSecret = sharedPreferences.getString(AppApplication.getContext().getString(R.string.pref_client_secret), null);
-
+        String refreshToken = sharedPref.getString(context.getString(R.string.pref_token_refresh), null);
+        String userName = sharedPref.getString(context.getString(R.string.pref_auth_username), null);
+        String clientId = sharedPref.getString(context.getString(R.string.pref_client_id), null);
+        String clientSecret = sharedPref.getString(context.getString(R.string.pref_client_secret), null);
 
         Call<Token> call = service.refreshToken(
                 clientId,
@@ -152,26 +132,18 @@ public class LoginService {
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(@NonNull Call<Token> call, @NonNull retrofit2.Response<Token> response) {
-
                 if (response.isSuccessful()) {
-
                     Token token = response.body();
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-
                     assert token != null;
-                    editor.putString(context.getString(R.string.pref_token_access), token.getAccessToken());
-                    editor.putString(context.getString(R.string.pref_token_refresh), token.getRefreshToken());
-                    editor.putString(context.getString(R.string.pref_token_type), token.getTokenType());
-                    editor.apply();
-
+                    sharedPref.edit()
+                            .putString(context.getString(R.string.pref_token_access), token.getAccessToken())
+                            .putString(context.getString(R.string.pref_token_refresh), token.getRefreshToken())
+                            .putString(context.getString(R.string.pref_token_type), token.getTokenType())
+                            .apply();
                     Log.wtf(TAG, "Logged in");
-
                     Toast.makeText(context, context.getString(R.string.authentication_token_refresh_success), Toast.LENGTH_LONG).show();
-
-
                 } else {
-                    Log.wtf(TAG, response.toString());
+                    // Log.wtf(TAG, response.toString());
                     Toast.makeText(context, context.getString(R.string.authentication_token_refresh_failed), Toast.LENGTH_LONG).show();
 
                 }
@@ -179,7 +151,7 @@ public class LoginService {
 
             @Override
             public void onFailure(@NonNull Call<Token> call2, @NonNull Throwable t2) {
-                Log.wtf("err", t2.fillInStackTrace());
+                // Log.wtf("err", t2.fillInStackTrace());
                 Toast.makeText(context, context.getString(R.string.authentication_token_refresh_failed), Toast.LENGTH_LONG).show();
 
             }

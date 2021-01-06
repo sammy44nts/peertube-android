@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     tools:context="net.schueller.peertube.activity.VideoPlayActivity">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment android:name="net.schueller.peertube.fragment.VideoPlayerFragment"
+        <fragment
             android:id="@+id/video_player_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:name="net.schueller.peertube.fragment.VideoPlayerFragment"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_below="@id/video_player_fragment"
-            android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/video_player_fragment">
 
             <ScrollView
                 android:id="@+id/login_form"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <fragment android:name="net.schueller.peertube.fragment.VideoMetaDataFragment"
+                <fragment
                     android:id="@+id/video_meta_data_fragment"
+                    android:name="net.schueller.peertube.fragment.VideoMetaDataFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </ScrollView>
-        </RelativeLayout>
-
-
-    </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
